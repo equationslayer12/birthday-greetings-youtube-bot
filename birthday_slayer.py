@@ -14,20 +14,21 @@ def get_videos_in_folder(folder_path):
 
 
 def names_generator() -> str:
-    with open(NAMES_PATH, "r") as names_file:
+    with open(NAMES_PATH, "r", encoding="utf-8") as names_file:
         for name in names_file:
             yield name[:-1]
 
 
 def main():
-    vid_maker = videoMaker.VideoMaker(BASE_VIDEOS_DIR)
+    # vid_maker = videoMaker.VideoMaker(BASE_VIDEOS_DIR)
 
-    with thumbnailMaker.ThumbnailMaker(r"/footage/base_thumbnail/base.jpg", r"/birthdays_slayed/") as thumb_maker:
+    with thumbnailMaker.ThumbnailMaker(r"./footage/base_thumbnail.jpg",
+                                       r"./birthdays_slayed/youtube_videos/thumbnails/") as thumb_maker:
         for name in names_generator():
             video_path = f"{NAME_VID_DIR}/{name}.mp4"
-            new_video_path = vid_maker.make_video(video_path, name)
-            vid_maker.make_short(new_video_path)
-            thumb_maker.make_thumbnail(video_path)
+            # new_video_path = vid_maker.make_video(video_path, name)
+            # vid_maker.make_short(new_video_path)
+            thumb_maker.make_thumbnail(name)
 
 
 if __name__ == "__main__":

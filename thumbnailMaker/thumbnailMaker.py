@@ -2,7 +2,11 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 
-FONT = ImageFont.truetype("SecularOne.ttf", 320)
+font_path = "./thumbnailMaker/SecularOne.ttf"
+if __name__ == "__main__":
+    font_path = "./SecularOne.ttf"
+
+FONT = ImageFont.truetype(font_path, 320)
 
 
 class ThumbnailMaker:
@@ -43,7 +47,7 @@ class ThumbnailMaker:
 
 if __name__ == "__main__":
     names = ["דניאל", "רועי", "הראל", "נועה", "יעקב", "שמואל", "שרה", "פתח תקווה", "ירשולים", "ביבי", "דונדה", "פבלו",
-             "רשיף", "מחמוד", "קוף"]
+             "רשיף", "מחמוד", "קוף", "גרגמל", "ינאי"]
     with ThumbnailMaker(r"../footage/base_thumbnail.jpg",
                         "../birthdays_slayed/youtube_videos/thumbnails/") as thumbnail_maker:
         for name in names:
