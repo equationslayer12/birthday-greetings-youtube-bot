@@ -6,23 +6,22 @@ FONT = ImageFont.truetype("SecularOne.ttf", 320)
 
 
 class ThumbnailMaker:
-    def __init__(self, base_image_path):
+    def __init__(self, base_image_path: str, output_dir: str):
         self.base_image_path = base_image_path
         self.base_image = None
+        self.output_dir = output_dir
 
     def __enter__(self):
-        print("entered")
         self.base_image = Image.open(self.base_image_path)
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        print('exit method called')
         self.base_image.close()
         self.base_image = None
         self.center_pos = None
 
-    def create_thumbnail(self, name: str) -> None:
-        new_image = self.base_image.copy()
+    def make_thumbnail(self, name: str) -> None:
+        new_image: Image = self.base_image.copy()
         draw = ImageDraw.Draw(new_image)
         _, _, text_width, text_height = draw.textbbox((0, 0), text=name, font=FONT)
         center_pos = (
@@ -31,7 +30,7 @@ class ThumbnailMaker:
         )
         draw.text(
             center_pos,
-            name,
+            name[::-1],
             (255, 255, 255),
             align="center",
             font=FONT,
@@ -39,9 +38,13 @@ class ThumbnailMaker:
             stroke_width=10
         )
 
-        new_image.show()
+        new_image.save(self.output_dir + name + ".png")
 
 
 if __name__ == "__main__":
-    with ThumbnailMaker(r"../footage/base_thumbnail/base.jpg") as thumbnail_maker:
-        thumbnail_maker.create_thumbnail(name="Name"[::-1])
+    names = ["דניאל", "רועי", "הראל", "נועה", "יעקב", "שמואל", "שרה", "פתח תקווה", "ירשולים", "ביבי", "דונדה", "פבלו",
+             "רשיף", "מחמוד", "קוף"]
+    with ThumbnailMaker(r"../footage/base_thumbnail/base.jpg",
+                        "../birthdays_slayed/youtube_videos/thumbnails/") as thumbnail_maker:
+        for name in names:
+            thumbnail_maker.make_thumbnail(name=name)

@@ -14,12 +14,12 @@ def main():
     vid_maker = videoMaker.VideoMaker("/footage/base_videos")
     names = ["daniel", "equations"]
 
-    with thumbnailMaker.ThumbnailMaker(r"/footage/base_thumbnail/base.jpg") as thumb_maker:
+    with thumbnailMaker.ThumbnailMaker(r"/footage/base_thumbnail/base.jpg", r"/birthdays_slayed/") as thumb_maker:
         for name in names:
             video_path = RAW_VID_DIR + name + ".mp4"
-            vid_maker.make_video(video_path, name)
-            vid_maker.make_short(video_path)
-            thumb_maker.create_thumbnail(video_path)
+            new_video_path = vid_maker.make_video(video_path, name)
+            vid_maker.make_short(new_video_path)
+            thumb_maker.make_thumbnail(video_path)
 
 
 if __name__ == "__main__":
