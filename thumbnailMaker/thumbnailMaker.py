@@ -44,7 +44,7 @@ class ThumbnailMaker:
 if __name__ == "__main__":
     names = ["דניאל", "רועי", "הראל", "נועה", "יעקב", "שמואל", "שרה", "פתח תקווה", "ירשולים", "ביבי", "דונדה", "פבלו",
              "רשיף", "מחמוד", "קוף"]
-    with ThumbnailMaker(r"../footage/base_thumbnail/base.jpg",
+    with ThumbnailMaker(r"../footage/base_thumbnail.jpg",
                         "../birthdays_slayed/youtube_videos/thumbnails/") as thumbnail_maker:
         for name in names:
             thumbnail_maker.make_thumbnail(name=name)
