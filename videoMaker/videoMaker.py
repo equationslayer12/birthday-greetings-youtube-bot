@@ -28,6 +28,9 @@ class VideoMaker:
         final_video = concatenate_videoclips([name_clip, choice(self.clips), end_clip])
         final_video.write_videofile(f"./{name}.mp4")
 
+    def make_short(self, video_path):
+        ...
+
 
 if __name__ == "__main__":
     video_maker = VideoMaker("../footage/base_videos")
