@@ -22,7 +22,7 @@ def names_generator() -> str:
 def main():
     # vid_maker = videoMaker.VideoMaker(BASE_VIDEOS_DIR)
 
-    with thumbnailMaker.ThumbnailMaker(r"./footage/base_thumbnail.jpg",
+    with thumbnailMaker.ImageMaker(r"footage/base_images/base_thumbnail.jpg",
                                        r"./birthdays_slayed/youtube_videos/thumbnails/") as thumb_maker:
         for name in names_generator():
             video_path = f"{NAME_VID_DIR}/{name}.mp4"

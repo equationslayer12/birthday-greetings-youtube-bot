@@ -9,7 +9,7 @@ if __name__ == "__main__":
 FONT = ImageFont.truetype(font_path, 320)
 
 
-class ThumbnailMaker:
+class ImageMaker:
     def __init__(self, base_image_path: str, output_dir: str):
         self.base_image_path = base_image_path
         self.base_image = None
@@ -48,7 +48,7 @@ class ThumbnailMaker:
 if __name__ == "__main__":
     names = ["דניאל", "רועי", "הראל", "נועה", "יעקב", "שמואל", "שרה", "פתח תקווה", "ירשולים", "ביבי", "דונדה", "פבלו",
              "רשיף", "מחמוד", "קוף", "גרגמל", "ינאי"]
-    with ThumbnailMaker(r"../footage/base_thumbnail.jpg",
+    with ImageMaker(r"../footage/base_images/base_thumbnail.jpg",
                         "../birthdays_slayed/youtube_videos/thumbnails/") as thumbnail_maker:
         for name in names:
             thumbnail_maker.make_thumbnail(name=name)
