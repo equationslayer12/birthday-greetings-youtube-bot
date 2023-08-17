@@ -16,11 +16,11 @@ def add_name_to_video(video_path: str, name: str):
 
 
 class VideoMaker:
-    def __init__(self, base_videos_path: str):
+    def __init__(self, base_videos_dir: str):
         self.clips = []
 
-        for file_name in listdir(base_videos_path):
-            self.clips.append(VideoFileClip(f"{base_videos_path}/{file_name}"))
+        for file_name in listdir(base_videos_dir):
+            self.clips.append(VideoFileClip(f"{base_videos_dir}/{file_name}"))
 
     def make_video(self, video_path, name):
         name_clip = VideoFileClip(video_path)
