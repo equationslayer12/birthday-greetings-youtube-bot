@@ -20,7 +20,10 @@ class ImageMaker:
         self.base_image = None
         self.center_pos = None
 
-    def make_image(self, name: str) -> None:
+    def make_image(self, name: str, output_name=None) -> None:
+        if output_name is None:
+            output_name = name
+
         new_image: Image = self.base_image.copy()
         draw = ImageDraw.Draw(new_image)
         _, _, text_width, text_height = draw.textbbox((0, 0), text=name, font=self.font)
@@ -38,7 +41,7 @@ class ImageMaker:
             stroke_width=10
         )
 
-        new_image.save(self.output_dir + name + ".png")
+        new_image.save(self.output_dir + output_name + ".png")
 
 
 if __name__ == "__main__":
