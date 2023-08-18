@@ -2,18 +2,13 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 
-font_path = "./imageMaker/SecularOne.ttf"
-if __name__ == "__main__":
-    font_path = "./SecularOne.ttf"
-
-FONT = ImageFont.truetype(font_path, 320)
-
 
 class ImageMaker:
-    def __init__(self, base_image_path: str, output_dir: str):
+    def __init__(self, base_image_path: str, output_dir: str, font_path: str):
         self.base_image_path = base_image_path
         self.base_image = None
         self.output_dir = output_dir
+        self.font = ImageFont.truetype(font_path, 320)
 
     def __enter__(self):
         self.base_image = Image.open(self.base_image_path)
@@ -27,7 +22,7 @@ class ImageMaker:
     def make_image(self, name: str) -> None:
         new_image: Image = self.base_image.copy()
         draw = ImageDraw.Draw(new_image)
-        _, _, text_width, text_height = draw.textbbox((0, 0), text=name, font=FONT)
+        _, _, text_width, text_height = draw.textbbox((0, 0), text=name, font=self.font)
         center_pos = (
             (new_image.width - text_width) // 2,
             (new_image.height - text_height) // 2
@@ -37,7 +32,7 @@ class ImageMaker:
             name[::-1],
             (255, 255, 255),
             align="center",
-            font=FONT,
+            font=self.font,
             stroke_fill=(0, 0, 0),
             stroke_width=10
         )
@@ -49,6 +44,7 @@ if __name__ == "__main__":
     names = ["דניאל", "רועי", "הראל", "נועה", "יעקב", "שמואל", "שרה", "פתח תקווה", "ירשולים", "ביבי", "דונדה", "פבלו",
              "רשיף", "מחמוד", "קוף", "גרגמל", "ינאי"]
     with ImageMaker(r"../footage/base_images/base_thumbnail.jpg",
-                    "../birthdays_slayed/youtube_videos/thumbnails/") as image_maker:
+                    "../birthdays_slayed/youtube_videos/thumbnails/",
+                    font_path="../SecularOne.ttf") as image_maker:
         for name in names:
             image_maker.make_image(name=name)
