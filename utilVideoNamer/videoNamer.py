@@ -1,5 +1,9 @@
+NAMES_FILE_PATH = r"../footage/names.txt"
+NEW_NAMES_FILE_PATH = r"../footage/new_names.txt"
+
+
 def new_txt():
-    with open('../footage/names.txt', 'r', encoding='utf-8') as names_file:
+    with open(NAMES_FILE_PATH, 'r', encoding='utf-8') as names_file:
         names = names_file.read()
     names_tab = names.replace(' ', '\n')
     name_list = names_tab.split()
@@ -27,4 +31,4 @@ def new_names_txt(location,unique_list):
 
 a = check_duplicates(new_txt())[1]
 
-new_names_txt('../footage/newNames1.txt', a)
+new_names_txt(NEW_NAMES_FILE_PATH, a)
