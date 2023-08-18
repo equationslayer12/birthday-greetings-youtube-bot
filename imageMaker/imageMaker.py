@@ -2,7 +2,7 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 
-font_path = "./thumbnailMaker/SecularOne.ttf"
+font_path = "./imageMaker/SecularOne.ttf"
 if __name__ == "__main__":
     font_path = "./SecularOne.ttf"
 
@@ -24,7 +24,7 @@ class ImageMaker:
         self.base_image = None
         self.center_pos = None
 
-    def make_thumbnail(self, name: str) -> None:
+    def make_image(self, name: str) -> None:
         new_image: Image = self.base_image.copy()
         draw = ImageDraw.Draw(new_image)
         _, _, text_width, text_height = draw.textbbox((0, 0), text=name, font=FONT)
@@ -49,6 +49,6 @@ if __name__ == "__main__":
     names = ["דניאל", "רועי", "הראל", "נועה", "יעקב", "שמואל", "שרה", "פתח תקווה", "ירשולים", "ביבי", "דונדה", "פבלו",
              "רשיף", "מחמוד", "קוף", "גרגמל", "ינאי"]
     with ImageMaker(r"../footage/base_images/base_thumbnail.jpg",
-                        "../birthdays_slayed/youtube_videos/thumbnails/") as thumbnail_maker:
+                    "../birthdays_slayed/youtube_videos/thumbnails/") as image_maker:
         for name in names:
-            thumbnail_maker.make_thumbnail(name=name)
+            image_maker.make_image(name=name)
