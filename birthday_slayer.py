@@ -26,11 +26,14 @@ def main():
     with imageMaker.ImageMaker(BASE_THUMBNAIL_PATH, r"./birthdays_slayed/youtube_videos/thumbnails/", FONT_PATH) as \
             image_maker:
         video_maker = videoMaker.VideoMaker("./footage", "./videoMaker", BIRTHDAYS_SLAYED_DIR)
-        for name in names_generator():
-            video_path = f"{NAME_VID_DIR}/{name}.mp4"
-            new_video_path = video_maker.make_video(video_path, name, FONT_PATH)
-            video_maker.make_short(new_video_path, name)
-            image_maker.make_image(name)
+        try:
+            for name in names_generator():
+                video_path = f"{NAME_VID_DIR}/{name}.mp4"
+                new_video_path = video_maker.make_video(video_path, name, FONT_PATH)
+                video_maker.make_short(new_video_path, name)
+                image_maker.make_image(name)
+        except OSError:
+            print("Out of name videos or names from txt file.")
 
 
 if __name__ == "__main__":

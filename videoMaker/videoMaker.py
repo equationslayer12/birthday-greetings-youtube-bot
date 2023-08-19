@@ -6,6 +6,22 @@ from imageMaker import imageMaker
 FONT_SIZE = 75
 AMOUNT_OF_WISHES = 8
 NAME_OF_END_IMAGE = "ending_image"
+FRAME_SIZE = (1920, 1080)
+
+
+def resize_clips(clips) -> list:
+    max_width = max(clip.size[0] for clip in clips)
+    max_height = max(clip.size[1] for clip in clips)
+
+    resized_clips = []
+    for clip in clips:
+        aspect_ratio = clip.size[0] / clip.size[1]
+        new_width = min(max_width, int(max_height * aspect_ratio))
+        new_height = min(max_height, int(max_width / aspect_ratio))
+        resized_clip = clip.resize((new_width, new_height))
+        resized_clips.append(resized_clip)
+
+    return resized_clips
 
 
 def create_image(name: str, footage_dir: str, video_maker_dir: str, font_path: str) -> str:
@@ -63,7 +79,7 @@ class VideoMaker:
             clip = VideoFileClip(wish)
             wishes.append(clip)
 
-        final_video = concatenate_videoclips([name_clip] + wishes + [end_clip], method="compose")
+        final_video = concatenate_videoclips(resize_clips([name_clip] + wishes + [end_clip]), method="compose")
         final_video.write_videofile(f"{self.birthdays_slayed_dir}/youtube_videos/{name}.mp4")
 
         return f"{self.birthdays_slayed_dir}/youtube_videos/{name}.mp4"

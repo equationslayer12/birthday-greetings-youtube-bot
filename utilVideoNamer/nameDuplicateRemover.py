@@ -1,3 +1,5 @@
+from videoNamer import sort_txt_file_alphabetically
+
 NAMES_FILE_PATH = r"../footage/names.txt"
 NEW_NAMES_FILE_PATH = r"../footage/new_names.txt"
 
@@ -5,30 +7,29 @@ NEW_NAMES_FILE_PATH = r"../footage/new_names.txt"
 def new_txt():
     with open(NAMES_FILE_PATH, 'r', encoding='utf-8') as names_file:
         names = names_file.read()
-    names_tab = names.replace(' ', '\n')
-    name_list = names_tab.split()
-    return name_list
+    names = names.split()
+
+    return names
 
 
 def check_duplicates(name_list):
-    unique_names = []
-    duplicates = []
+    unique_names_list = []
 
     for name in name_list:
-        if name in unique_names:
-            duplicates.append(name)
-        else:
-            unique_names.append(name)
+        if name not in unique_names_list:
+            unique_names_list.append(name)
 
-    return duplicates, unique_names
+    return unique_names_list
 
 
-def new_names_txt(location,unique_list):
+def new_names_txt(location, unique_list):
     with open(location, 'w', encoding='utf-8') as new_file:
         for name in unique_list:
-            new_file.write(name + '\n')
+            new_file.write(f"{name}\n")
+
+    sort_txt_file_alphabetically(location)
 
 
-a = check_duplicates(new_txt())[1]
-
-new_names_txt(NEW_NAMES_FILE_PATH, a)
+if __name__ == "__main__":
+    unique_names = check_duplicates(new_txt())
+    new_names_txt(NEW_NAMES_FILE_PATH, unique_names)
