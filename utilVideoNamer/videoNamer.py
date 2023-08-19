@@ -1,34 +1,17 @@
-NAMES_FILE_PATH = r"../footage/names.txt"
-NEW_NAMES_FILE_PATH = r"../footage/new_names.txt"
+from os import listdir, rename
 
 
-def new_txt():
-    with open(NAMES_FILE_PATH, 'r', encoding='utf-8') as names_file:
-        names = names_file.read()
-    names_tab = names.replace(' ', '\n')
-    name_list = names_tab.split()
-    return name_list
+class VideoNamer:
+    def __init__(self, name_videos_dir: str, names_text_file_path: str):
+        self.name_videos_dir = name_videos_dir
+        self.names_text_file_path = names_text_file_path
+
+    def name_videos(self):
+        with open(self.names_text_file_path, "r", encoding="utf-8") as f:
+            for current_file_name, new_file_name in zip(listdir(self.name_videos_dir), f.readlines()):
+                rename(f"{self.name_videos_dir}/{current_file_name}", f"{self.name_videos_dir}/{new_file_name[:-1]}.mp4")
 
 
-def check_duplicates(name_list):
-    unique_names = []
-    duplicates = []
-
-    for name in name_list:
-        if name in unique_names:
-            duplicates.append(name)
-        else:
-            unique_names.append(name)
-
-    return duplicates, unique_names
-
-
-def new_names_txt(location,unique_list):
-    with open(location, 'w', encoding='utf-8') as new_file:
-        for name in unique_list:
-            new_file.write(name + '\n')
-
-
-a = check_duplicates(new_txt())[1]
-
-new_names_txt(NEW_NAMES_FILE_PATH, a)
+if __name__ == "__main__":
+    video_namer = VideoNamer("../footage/name_videos", "../footage/new_names.txt")
+    video_namer.name_videos()
