@@ -14,9 +14,9 @@ AMOUNT_OF_WISHES = 8
 def create_image(name: str):
     """ Returns path to end image """
     with imageMaker.ImageMaker(BASE_IMAGE_PATH, "./", "../SecularOne.ttf", 150, -50) as image_maker:
-        image_maker.make_image(name)
+        image_maker.make_image(name, "ending_image")
 
-    return f"./{name}.png"
+    return f"./ending_image.png"
 
 
 def create_end_clip(name: str) -> str:
@@ -53,11 +53,7 @@ class VideoMaker:
         name_clip = VideoFileClip(video_path)
         end_clip_path = create_end_clip(name)
         end_clip = VideoFileClip(end_clip_path)
-        wishes = []
-        for path in birthday_wishes(self.clips, self.include_clips):
-            clip = VideoFileClip(path)
-            print(path, clip.duration)
-            wishes.append(clip)
+        wishes = [VideoFileClip(wish) for wish in birthday_wishes(self.clips, self.include_clips)]
         final_video = concatenate_videoclips([name_clip] + wishes + [end_clip], method="compose")
         final_video.write_videofile(f"{VIDEOS_PATH}/{name}.mp4")
 
