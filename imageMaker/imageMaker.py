@@ -40,7 +40,7 @@ class ImageMaker:
             stroke_width=10
         )
 
-        new_image.save(self.output_dir + file_name + ".png")
+        new_image.save(f"{self.output_dir}/{file_name}.png")
 
 
 if __name__ == "__main__":

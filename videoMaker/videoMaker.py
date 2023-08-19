@@ -4,29 +4,28 @@ from os import listdir
 from imageMaker import imageMaker
 
 FONT_SIZE = 75
-VIDEOS_PATH = "../birthdays_slayed/youtube_videos"
-SHORTS_PATH = "../birthdays_slayed/youtube_shorts"
-BASE_IMAGE_PATH = "../footage/base_images/base_end_of_video.png"
-ENDING_AUDIO_PATH = "../footage/part_3_audio.mp3"
 AMOUNT_OF_WISHES = 8
+NAME_OF_END_IMAGE = "ending_image"
 
 
-def create_image(name: str):
+def create_image(name: str, footage_dir: str, video_maker_dir: str, font_path: str) -> str:
     """ Returns path to end image """
-    with imageMaker.ImageMaker(BASE_IMAGE_PATH, "./", "../SecularOne.ttf", 150, -50) as image_maker:
-        image_maker.make_image(name, "ending_image")
+    with imageMaker.ImageMaker(f"{footage_dir}/base_images/base_end_of_video.png", video_maker_dir,
+                               font_path, 150, -50) as image_maker:
+        image_maker.make_image(name, NAME_OF_END_IMAGE)
 
-    return f"./ending_image.png"
+    return f"{video_maker_dir}/{NAME_OF_END_IMAGE}.png"
 
 
-def create_end_clip(name: str) -> str:
+def create_end_clip(name: str, footage_dir: str, video_maker_dir: str, font_path: str) -> str:
     """ Returns path to end clip """
-    ending_clip_audio = AudioFileClip(ENDING_AUDIO_PATH)
-    ending_clip = ImageClip(create_image(name)).set_duration(ending_clip_audio.duration)
+    ending_clip_audio = AudioFileClip(f"{footage_dir}/part_3_audio.mp3")
+    ending_clip = ImageClip(create_image(name, footage_dir, video_maker_dir, font_path)).set_duration(ending_clip_audio.
+                                                                                                      duration)
     ending_clip = ending_clip.set_audio(ending_clip_audio)
-    ending_clip.write_videofile("./ending_clip.mp4", fps=24)
+    ending_clip.write_videofile(f"{video_maker_dir}/ending_clip.mp4", fps=24)
 
-    return "./ending_clip.mp4"
+    return f"{video_maker_dir}/ending_clip.mp4"
 
 
 def birthday_wishes(every_base_video: list, every_base_video_to_include: list) -> list:
@@ -44,20 +43,30 @@ def birthday_wishes(every_base_video: list, every_base_video_to_include: list) -
 
 
 class VideoMaker:
-    def __init__(self, base_videos_dir: str, base_videos_to_include_dir: str):
+    def __init__(self, footage_dir: str, video_maker_dir: str, birthdays_slayed_dir: str):
+        base_videos_dir = f"{footage_dir}/base_videos"
+        base_videos_to_include_dir = f"{footage_dir}/base_videos_to_always_include"
+        self.birthdays_slayed_dir = birthdays_slayed_dir
+        self.footage_dir = footage_dir
+        self.video_maker_dir = video_maker_dir
         self.clips = [f"{base_videos_dir}/{file_name}" for file_name in listdir(base_videos_dir)]
-        self.include_clips = [f"{base_videos_to_include_dir}/{file_name}" for file_name in listdir(base_videos_to_include_dir)]
+        self.include_clips = [f"{base_videos_to_include_dir}/{file_name}" for file_name in
+                              listdir(base_videos_to_include_dir)]
 
-    def make_video(self, video_path, name) -> str:
+    def make_video(self, video_path, name, font_path) -> str:
         """ Returns path to the video """
         name_clip = VideoFileClip(video_path)
-        end_clip_path = create_end_clip(name)
+        end_clip_path = create_end_clip(name, self.footage_dir, self.video_maker_dir, font_path)
         end_clip = VideoFileClip(end_clip_path)
-        wishes = [VideoFileClip(wish) for wish in birthday_wishes(self.clips, self.include_clips)]
-        final_video = concatenate_videoclips([name_clip] + wishes + [end_clip], method="compose")
-        final_video.write_videofile(f"{VIDEOS_PATH}/{name}.mp4")
+        wishes = []
+        for wish in birthday_wishes(self.clips, self.include_clips):
+            clip = VideoFileClip(wish)
+            wishes.append(clip)
 
-        return f"{VIDEOS_PATH}/{name}.mp4"
+        final_video = concatenate_videoclips([name_clip] + wishes + [end_clip], method="compose")
+        final_video.write_videofile(f"{self.birthdays_slayed_dir}/youtube_videos/{name}.mp4")
+
+        return f"{self.birthdays_slayed_dir}/youtube_videos/{name}.mp4"
 
     def make_short(self, video_path, name):
         video = VideoFileClip(video_path)
@@ -66,9 +75,9 @@ class VideoMaker:
         x2 = video.w - x1
         y2 = video.h
         short = video.crop(x1=x1, y1=y1, x2=x2, y2=y2)
-        short.write_videofile(f"{SHORTS_PATH}/{name}.mp4")
+        short.write_videofile(f"{self.birthdays_slayed_dir}/youtube_shorts/{name}.mp4")
 
 
 if __name__ == "__main__":
-    video_maker = VideoMaker("../footage/base_videos", "../footage/base_videos_to_always_include")
-    video_maker.make_short(video_maker.make_video(r"D:\Downloads\the truth.mp4", "דניאל"), "דניאל")
+    video_maker = VideoMaker("../footage", "./", "../birthdays_slayed")
+    video_maker.make_video("../footage/name_videos/דניאל.mp4", "דניאל", "../SecularOne.ttf")
